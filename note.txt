@@ -131,3 +131,39 @@ id_rsa是私钥，不能泄露出去，id_rsa.pub是公钥，可以放心地告诉任何人。
 		合并某分支到当前分支：git merge <name>
 		
 		删除分支：git branch -d <name>
+		
+		
+12.解决冲突
+
+		当Git无法自动合并分支时，就必须首先解决冲突。解决冲突后，再提交，合并完成。
+		
+		解决冲突就是把Git合并失败的文件手动编辑为我们希望的内容，再提交。
+		
+		用git log --graph命令可以看到分支合并图
+		
+		$ git log --graph --pretty=oneline --abbrev-commit
+		
+		*   f0c42bb (HEAD -> master) conflict fixed
+		|\
+		| * 0c34c88 (feature1) AND simple
+		* | 62dc980 & simple
+		|/
+		* c2b07b8 update note to 11
+		*   bf98502 Merge branch 'dev'
+		|\
+		| * 0badb0f branch test
+		* | 307c7ef update note to 10
+		|/
+		* 76ac699 delete LICENSE
+		* 4a32588 (origin/master) update note to 9
+		* a87b7fe update to 7
+		* 3eaca04 remove test.txt
+		* 61f85c1 add test.txt
+		* d17255d my note of learning git
+		* 910c249 append of files
+		* 94a90e6 git tracks changes
+		* 5f0e5b9 add enter
+		* fadc2b2 understand how stage works
+		* fe282a9 append GPL
+		* 4991ec7 add a distributed
+		* 07868f9 wrote a readme file
