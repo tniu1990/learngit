@@ -17,7 +17,9 @@
     
 3.版本回退
 
-    HEAD指向的版本就是当前版本，因此，Git允许我们在版本的历史之间穿梭，使用命令git reset --hard commit_id。
+    HEAD指向的版本就是当前版本，因此，Git允许我们在版本的历史之间穿梭，使用命令
+    
+    git reset --hard commit_id。
 
     穿梭前，用git log可以查看提交历史，以便确定要回退到哪个版本。
 
@@ -38,9 +40,13 @@
     
 6.撤销修改
 
-    场景1：当你改乱了工作区某个文件的内容，想直接丢弃工作区的修改时，用命令git checkout -- file。
+    场景1：当你改乱了工作区某个文件的内容，想直接丢弃工作区的修改时，用命令
+    
+    git checkout -- file。
 
-    场景2：当你不但改乱了工作区某个文件的内容，还添加到了暂存区时，想丢弃修改，分两步，第一步用命令git reset HEAD <file>，就回到了场景1，第二步按场景1操作。
+    场景2：当你不但改乱了工作区某个文件的内容，还添加到了暂存区时，想丢弃修改，分两步，第一步用命令
+    
+    git reset HEAD <file>，就回到了场景1，第二步按场景1操作。
 
     场景3：已经提交了不合适的修改到版本库时，想要撤销本次提交，参考版本回退一节，不过前提是没有推送到远程库。
     
@@ -242,34 +248,89 @@ id_rsa是私钥，不能泄露出去，id_rsa.pub是公钥，可以放心地告诉任何人。
 让 client 看起来像直接基于 master 修改一样"。
 		
 		$ git checkout master
-    $ git merge client
+		$ git merge client
 		快进合并 master 分支，使之包含来自 client 分支的修改
-		
+
 		$ git rebase master server
 		将 server 分支中的修改也整合进来。 使用 git rebase <basebranch> <topicbranch> 命令可以直接将主题分支 （即本例中的 server）
 变基到目标分支（即 master）上。 这样做能省去你先切换到 server 分支，再对其执行变基命令的多个步骤。
-
+		
 		$ git checkout master
 		$ git merge server
 		然后就可以快进合并主分支 master 了
-
+		
 		$ git branch -d client
 		$ git branch -d serve
 		至此，client 和 server 分支中的修改都已经整合到主分支里了，删除这两个分支，最终提交历史会变成一条没有分支的直线。
 		
-		
+	
 18.创建/操作标签
+		
+		命令git tag <tagname>用于新建一个标签，默认为HEAD，也可以指定一个commit id；
+		
+		命令git tag -a <tagname> -m "blablabla..."可以指定标签信息；
+		
+		命令git tag可以查看所有标签。
+		
+		命令git push origin <tagname>可以推送一个本地标签；
+		
+		命令git push origin --tags可以推送全部未推送过的本地标签；
+		
+		命令git tag -d <tagname>可以删除一个本地标签；
+		
+		命令git push origin :refs/tags/<tagname>可以删除一个远程标签。
+		
 
-    命令git tag <tagname>用于新建一个标签，默认为HEAD，也可以指定一个commit id；
+19.使用GitHub
+		
+		在GitHub上，可以任意Fork开源仓库；
+		
+		自己拥有Fork后的仓库的读写权限；
+		
+		可以推送pull request给官方仓库来贡献代码。
+		
+		
+20.忽略特殊文件
 
-    命令git tag -a <tagname> -m "blablabla..."可以指定标签信息；
+		忽略某些文件时，需要编写.gitignore；
+		
+		.gitignore文件本身要放到版本库里，并且可以对.gitignore做版本管理！
+		
+		想添加被gitignore忽略的文件，可以用-f强制添加到Git：
 
-    命令git tag可以查看所有标签。
+		$ git add -f App.class
+		
+		或者你发现，可能是.gitignore写得有问题，需要找出来到底哪个规则写错了，可以用git check-ignore命令检查：
 
-    命令git push origin <tagname>可以推送一个本地标签；
+		$ git check-ignore -v App.class
+		.gitignore:3:*.class	App.class
+		
+		即.gitignore的第3行规则忽略了该文件，于是我们就可以知道应该修订哪个规则。
+		
+		例外规则：
+		
+		# 不排除.gitignore和App.class:
+		!.gitignore
+		!App.class
 
-    命令git push origin --tags可以推送全部未推送过的本地标签；
 
-    命令git tag -d <tagname>可以删除一个本地标签；
+21.配置别名
 
-    命令git push origin :refs/tags/<tagname>可以删除一个远程标签。
+		$ git config --global alias.st status
+		告诉Git，以后st就表示status
+		
+		$ git config --global alias.co checkout
+		$ git config --global alias.ci commit
+		$ git config --global alias.br branch
+		$ git config --global alias.unstage 'reset HEAD'
+    $ git config --global alias.last 'log -1'
+    $ git config --global alias.lg "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
+		
+		配置Git的时候，加上--global是针对当前用户起作用的，如果不加，那只针对当前的仓库起作用。
+		
+		配置文件放哪了？每个仓库的Git配置文件都放在.git/config文件中。
+
+22.Git图形界面工具
+
+    首先从官网下载SourceTree并安装，然后直接运行SourceTree。
+
