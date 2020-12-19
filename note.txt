@@ -256,3 +256,20 @@ id_rsa是私钥，不能泄露出去，id_rsa.pub是公钥，可以放心地告诉任何人。
 		$ git branch -d client
 		$ git branch -d serve
 		至此，client 和 server 分支中的修改都已经整合到主分支里了，删除这两个分支，最终提交历史会变成一条没有分支的直线。
+		
+		
+18.创建/操作标签
+
+    命令git tag <tagname>用于新建一个标签，默认为HEAD，也可以指定一个commit id；
+
+    命令git tag -a <tagname> -m "blablabla..."可以指定标签信息；
+
+    命令git tag可以查看所有标签。
+
+    命令git push origin <tagname>可以推送一个本地标签；
+
+    命令git push origin --tags可以推送全部未推送过的本地标签；
+
+    命令git tag -d <tagname>可以删除一个本地标签；
+
+    命令git push origin :refs/tags/<tagname>可以删除一个远程标签。
