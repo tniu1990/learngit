@@ -209,3 +209,51 @@ id_rsa是私钥，不能泄露出去，id_rsa.pub是公钥，可以放心地告诉任何人。
     建立本地分支和远程分支的关联，使用git branch --set-upstream-to <branch-name> origin/<branch-name>
 
     从远程抓取分支，使用git pull，如果有冲突，要先处理冲突。
+
+
+17.Rebase/变基
+
+
+		rebase操作可以把本地未push的分叉提交历史整理成直线；
+		
+		rebase的目的是使得我们在查看历史提交的变化时更容易，因为分叉的提交需要三方对比
+		
+		Merge和Rebase的差异：
+		
+		merge : 三方合并（2分支(master(C3)+experiment(C4))+共同祖先(C2)），授人以鱼
+		       
+		       $ git checkout master(C3)
+		       $ git merge --no-ff -m "merge experiment(C4)" experiment(C4)
+		
+		rebase :差分合并（C3+(C4-C2)）,授人以渔
+		
+		       $ git checkout experiment(C4)
+		       $ git rebase master(C3)
+		       检出 experiment 分支，然后将它变基到 master 分支上
+		       
+		       $ git checkout master(C3)
+		       $ git merge experiment(C4)
+		       回到 master 分支，进行一次快进合并
+		       
+		Rebase引申:
+		
+		$ git rebase --onto master server client
+		以上命令的意思是：“取出 client 分支，找出它从 server 分支分歧之后的补丁， 然后把这些补丁在 master 分支上重放一遍，
+让 client 看起来像直接基于 master 修改一样"。
+		
+		$ git checkout master
+    $ git merge client
+		快进合并 master 分支，使之包含来自 client 分支的修改
+		
+		$ git rebase master server
+		将 server 分支中的修改也整合进来。 使用 git rebase <basebranch> <topicbranch> 命令可以直接将主题分支 （即本例中的 server）
+变基到目标分支（即 master）上。 这样做能省去你先切换到 server 分支，再对其执行变基命令的多个步骤。
+
+		$ git checkout master（可省略？）
+		$ git merge server
+		然后就可以快进合并主分支 master 了
+
+		$ git branch -d client
+		$ git branch -d serve
+		至此，client 和 server 分支中的修改都已经整合到主分支里了，删除这两个分支，最终提交历史会变成一条没有分支的直线。
+
